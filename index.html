@@ -3,16 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tulipán para ti 🌷</title>
+  <title>YP 🌷</title>
   <style>
     :root {
       --container-size: min(90vw, 90vh, 500px);
       --flower-size: calc(var(--container-size) * 0.44);
       --control-padding: 2vw;
+      --primary-color: #ec4899;
+      --primary-dark: #be185d;
+      --secondary-color: #f9a8d4;
+      --bg-dark: #0f172a;
+      --bg-medium: #1e293b;
+      --text-light: #f1f5f9;
     }
     
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
     
     body {
@@ -21,66 +29,135 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      background: linear-gradient(to bottom, #0f172a, #1e293b);
-      color: white;
+      background: linear-gradient(135deg, var(--bg-dark), var(--bg-medium));
+      color: var(--text-light);
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       padding: 20px;
       margin: 0;
       overflow-x: hidden;
+      line-height: 1.6;
+      position: relative;
+    }
+    
+    .initials {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.5rem;
+      z-index: 10;
+    }
+    
+    .initials span {
+      background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: bold;
     }
     
     h1 {
       margin: 2vh 0;
       text-align: center;
-      color: #f9a8d4;
-      text-shadow: 0 0 10px rgba(249, 168, 212, 0.5);
-      font-size: clamp(1.5rem, 5vw, 2.5rem);
+      color: var(--secondary-color);
+      text-shadow: 0 0 15px rgba(249, 168, 212, 0.7);
+      font-size: clamp(1.8rem, 6vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--secondary-color), transparent);
+      border-radius: 3px;
     }
     
     .controls {
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
-      background: rgba(30, 41, 59, 0.8);
-      padding: 15px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-      width: min(100%, 500px);
+      background: rgba(30, 41, 59, 0.9);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+      width: min(100%, 550px);
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     
     button {
-      background: #ec4899;
+      background: linear-gradient(to bottom, var(--primary-color), var(--primary-dark));
       border: none;
       color: white;
-      padding: 10px 15px;
-      border-radius: 10px;
+      padding: 12px 18px;
+      border-radius: 12px;
       cursor: pointer;
-      font-size: clamp(12px, 3vw, 16px);
-      transition: all 0.3s;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      font-size: clamp(13px, 3.5vw, 17px);
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       flex: 1;
-      min-width: 80px;
+      min-width: 90px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+    
+    button:hover::before {
+      left: 100%;
     }
     
     button:hover {
-      background: #be185d;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
     
     #speed {
       width: 120px;
-      accent-color: #ec4899;
+      accent-color: var(--primary-color);
+      cursor: pointer;
+      height: 8px;
+      border-radius: 4px;
     }
     
     .speed-container {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: clamp(12px, 3vw, 16px);
+      gap: 12px;
+      font-size: clamp(13px, 3.5vw, 17px);
+      background: rgba(15, 23, 42, 0.4);
+      padding: 8px 15px;
+      border-radius: 10px;
     }
     
     .flower-container {
@@ -88,10 +165,15 @@
       width: var(--container-size);
       height: var(--container-size);
       overflow: hidden;
-      border-radius: 10px;
+      border-radius: 16px;
       background: #f9f9f9;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
       border: 2px solid #94a3b8;
+      transition: transform 0.3s ease;
+    }
+    
+    .flower-container:hover {
+      transform: translateY(-5px);
     }
     
     .flower {
@@ -112,9 +194,10 @@
       height: auto;
       display: block;
       opacity: 0;
-      transition: opacity 0.5s ease;
+      transition: opacity 0.7s ease;
       position: absolute;
       bottom: 10%;
+      /* Eliminado el filtro de sombra para mantener el estilo original */
     }
     
     .flower .outline {
@@ -124,8 +207,8 @@
       height: auto;
       opacity: 0;
       z-index: 4;
-      transition: opacity 0.5s ease;
-      filter: contrast(0) brightness(10);
+      transition: opacity 0.7s ease;
+      filter: contrast(0) brightness(10); /* Eliminado el drop-shadow */
     }
     
     .pencil-effect {
@@ -136,11 +219,11 @@
       height: 100%;
       background: 
         radial-gradient(circle at center, rgba(0, 0, 0, 0.05) 5px, transparent 6px),
-        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0, 0, 0, 0.02) 19px, rgba(0, 0, 0, 0.02) 20px);
+        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0, 0, 0, 0.03) 19px, rgba(0, 0, 0, 0.03) 20px);
       background-size: 100% 100%, 100% 20px;
       z-index: 2;
       pointer-events: none;
-      opacity: 0.5;
+      opacity: 0.6;
     }
     
     .sketch-overlay {
@@ -150,24 +233,38 @@
       width: 100%;
       height: 100%;
       background: rgba(255, 255, 255, 0.95);
-      mask: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+      mask: linear-gradient(to bottom, transparent 0%, white 15%, white 85%, transparent 100%);
       mask-size: 100% 100%;
       mask-repeat: no-repeat;
       z-index: 4;
       pointer-events: none;
-      transition: mask-size 1.2s ease-out;
+      transition: mask-size 1.5s cubic-bezier(0.22, 0.61, 0.36, 1);
     }
     
     .message {
-      margin-top: 20px;
+      margin-top: 25px;
       text-align: center;
       font-style: italic;
-      max-width: min(90%, 500px);
-      background: rgba(30, 41, 59, 0.8);
-      padding: 15px;
-      border-radius: 15px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      font-size: clamp(14px, 3.5vw, 16px);
+      max-width: min(90%, 550px);
+      background: rgba(30, 41, 59, 0.9);
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+      font-size: clamp(15px, 4vw, 18px);
+      line-height: 1.7;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+    
+    .message::before {
+      content: '"';
+      font-size: 3rem;
+      color: var(--secondary-color);
+      position: absolute;
+      top: -5px;
+      left: 15px;
+      opacity: 0.7;
     }
     
     .loading {
@@ -178,9 +275,28 @@
       color: #0f172a;
       z-index: 1;
       font-weight: bold;
-      font-size: clamp(14px, 4vw, 18px);
+      font-size: clamp(15px, 4.5vw, 20px);
       text-align: center;
       width: 80%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .loading::after {
+      content: '';
+      width: 40px;
+      height: 40px;
+      border: 4px solid rgba(236, 72, 153, 0.3);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     
     .drawing-path {
@@ -195,12 +311,13 @@
     
     .path-point {
       position: absolute;
-      width: 3px;
-      height: 3px;
-      background-color: rgba(236, 72, 153, 0.6);
+      width: 4px;
+      height: 4px;
+      background-color: rgba(236, 72, 153, 0.7);
       border-radius: 50%;
       transform: translate(-50%, -50%);
       animation: fadePoint 1.5s forwards;
+      box-shadow: 0 0 5px rgba(236, 72, 153, 0.5);
     }
     
     @keyframes fadePoint {
@@ -208,18 +325,51 @@
       100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
     }
     
+    .footer {
+      margin-top: 25px;
+      text-align: center;
+      font-size: clamp(12px, 3vw, 14px);
+      opacity: 0.8;
+      padding: 10px;
+    }
+    
+    @media (max-width: 768px) {
+      .initials {
+        top: 15px;
+        left: 15px;
+        font-size: 1.3rem;
+      }
+    }
+    
     @media (max-width: 480px) {
       .controls {
         flex-direction: column;
-        padding: 10px;
+        padding: 15px;
+        gap: 15px;
       }
       
       button {
         width: 100%;
+        padding: 14px;
       }
       
       .speed-container {
         width: 100%;
+        justify-content: center;
+        padding: 10px;
+      }
+      
+      .message {
+        padding: 15px;
+      }
+      
+      h1 {
+        margin-bottom: 1rem;
+      }
+      
+      .initials {
+        position: static;
+        margin-bottom: 15px;
         justify-content: center;
       }
     }
@@ -230,40 +380,114 @@
       }
       
       body {
-        padding: 10px;
+        padding: 15px 10px;
       }
       
       .message {
-        padding: 10px;
+        padding: 12px;
+      }
+      
+      .controls {
+        padding: 12px;
+      }
+      
+      .initials {
+        font-size: 1.1rem;
+      }
+    }
+
+    /* Efectos de partículas de fondo */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(249, 168, 212, 0.15);
+      border-radius: 50%;
+      animation: float 15s infinite linear;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(720deg);
+        opacity: 0;
       }
     }
   </style>
 </head>
 <body>
-  <h1>🌷 Tulipán para ti 🌷</h1>
+  <!-- Partículas de fondo -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Iniciales y emojis -->
+  <div class="initials">
+    <span>💙</span>
+    <span>YP</span>
+    <span>💙</span>
+  </div>
+
+  <h1>🌷 Para ti 🌷</h1>
 
   <div class="controls">
-    <button id="drawBtn">▶ Dibujar</button>
-    <button id="pauseBtn">⏸ Pausar</button>
-    <button id="resetBtn">🔄 Reiniciar</button>
-    <div class="speed-container">
+    <button id="drawBtn">▶ </button>
+    <button id="pauseBtn">⏸ </button>
+    <button id="resetBtn">🔄 </button>
+    <!--div class="speed-container">
       <label for="speed">Velocidad:</label>
       <input type="range" id="speed" min="1" max="10" value="5">
-    </div>
+    </!div-->
   </div>
 
   <div class="flower-container" id="container">
     <div class="pencil-effect"></div>
     <div class="sketch-overlay" id="sketchOverlay"></div>
     <div class="drawing-path" id="drawingPath"></div>
-    <div class="loading" id="loadingText">Cargando tulipán...</div>
   </div>
   
   <div class="message">
-    <p>El tulipán representa amor perfecto y sinceridad. 🌷</p>
+    <p>El tulipán... amor perfecto y sinceridad. 🌷</p>
+  </div>
+
+  <div class="footer">
+    Hecho con 💙 para ti
   </div>
 
   <script>
+    // Crear partículas de fondo
+    function createParticles() {
+      const particlesContainer = document.getElementById('particles');
+      const particlesCount = Math.floor(window.innerWidth / 20);
+      
+      for (let i = 0; i < particlesCount; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        const size = Math.random() * 10 + 2;
+        const posX = Math.random() * 100;
+        const delay = Math.random() * 15;
+        const duration = Math.random() * 10 + 15;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.animationDelay = `${delay}s`;
+        particle.style.animationDuration = `${duration}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+    }
+
     const container = document.getElementById("container");
     const sketchOverlay = document.getElementById("sketchOverlay");
     const drawingPath = document.getElementById("drawingPath");
@@ -272,8 +496,9 @@
     let animationId;
     let isPaused = false;
     let flower = null;
-    let speed = 5;
+    let speed = 2;
     let drawingPoints = [];
+    let isInitialLoad = true;
     
     // Imagen del tulipán local (debe estar en el mismo directorio)
     const flowerImage = "tulipan.png";
@@ -289,6 +514,8 @@
       if (imagesLoaded === 2) {
         loadingText.style.display = 'none';
         precalculateDrawingPoints();
+        // Solo generar la flor visualmente, no iniciar animación
+        generateFlowerVisuals();
       }
     }
     
@@ -311,26 +538,41 @@
     });
 
     document.getElementById("drawBtn").addEventListener("click", () => {
-      if (!flower) {
-        generateFlower();
+      if (isInitialLoad) {
+        // Primera vez que se hace clic en dibujar
+        isInitialLoad = false;
+        if (!flower) {
+          generateFlower();
+        }
         animate();
       } else if (isPaused) {
+        // Reanudar la animación pausada
         isPaused = false;
+        animate();
+      } else if (flower && flower.currentProgress >= flower.maxProgress) {
+        // Reiniciar y comenzar de nuevo si ya terminó
+        resetFlower();
+        generateFlower();
         animate();
       }
     });
 
     document.getElementById("pauseBtn").addEventListener("click", () => {
       isPaused = true;
-      cancelAnimationFrame(animationId);
-      animationId = null;
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
       isPaused = false;
-      cancelAnimationFrame(animationId);
-      animationId = null;
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
       resetFlower();
+      isInitialLoad = true; // Volver al estado inicial después de reiniciar
     });
 
     function precalculateDrawingPoints() {
@@ -371,7 +613,8 @@
       }
     }
 
-    function generateFlower() {
+    function generateFlowerVisuals() {
+      // Solo crea los elementos visuales sin inicializar la animación
       const children = container.children;
       for (let i = children.length - 1; i >= 0; i--) {
         if (!children[i].classList.contains('pencil-effect') && 
@@ -380,11 +623,6 @@
             !children[i].classList.contains('loading')) {
           container.removeChild(children[i]);
         }
-      }
-      
-      // Limpiar puntos de dibujo anteriores
-      while (drawingPath.firstChild) {
-        drawingPath.removeChild(drawingPath.firstChild);
       }
       
       sketchOverlay.style.maskSize = '100% 100%';
@@ -418,6 +656,15 @@
         maxProgress: 500,
         drawn: false
       };
+    }
+
+    function generateFlower() {
+      generateFlowerVisuals();
+      
+      // Limpiar puntos de dibujo anteriores
+      while (drawingPath.firstChild) {
+        drawingPath.removeChild(drawingPath.firstChild);
+      }
     }
 
     function resetFlower() {
@@ -517,7 +764,8 @@
     });
     
     window.addEventListener('load', function() {
-      generateFlower();
+      createParticles();
+      // Solo preparamos la flor visualmente, no iniciamos animación
     });
   </script>
 </body>
