@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tulipán para ti 🌷</title>
+  <style>
+    :root {
+      --container-size: min(90vw, 90vh, 500px);
+      --flower-size: calc(var(--container-size) * 0.44);
+      --control-padding: 2vw;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(to bottom, #0f172a, #1e293b);
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    
+    h1 {
+      margin: 2vh 0;
+      text-align: center;
+      color: #f9a8d4;
+      text-shadow: 0 0 10px rgba(249, 168, 212, 0.5);
+      font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+    
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      align-items: center;
+      background: rgba(30, 41, 59, 0.8);
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      width: min(100%, 500px);
+    }
+    
+    button {
+      background: #ec4899;
+      border: none;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: clamp(12px, 3vw, 16px);
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      flex: 1;
+      min-width: 80px;
+    }
+    
+    button:hover {
+      background: #be185d;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    
+    #speed {
+      width: 120px;
+      accent-color: #ec4899;
+    }
+    
+    .speed-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: clamp(12px, 3vw, 16px);
+    }
+    
+    .flower-container {
+      position: relative;
+      width: var(--container-size);
+      height: var(--container-size);
+      overflow: hidden;
+      border-radius: 10px;
+      background: #f9f9f9;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+      border: 2px solid #94a3b8;
+    }
+    
+    .flower {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 3;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .flower img {
+      width: var(--flower-size);
+      height: auto;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      position: absolute;
+      bottom: 10%;
+    }
+    
+    .flower .outline {
+      position: absolute;
+      bottom: 10%;
+      width: var(--flower-size);
+      height: auto;
+      opacity: 0;
+      z-index: 4;
+      transition: opacity 0.5s ease;
+      filter: contrast(0) brightness(10);
+    }
+    
+    .pencil-effect {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at center, rgba(0, 0, 0, 0.05) 5px, transparent 6px),
+        repeating-linear-gradient(0deg, transparent, transparent 19px, rgba(0, 0, 0, 0.02) 19px, rgba(0, 0, 0, 0.02) 20px);
+      background-size: 100% 100%, 100% 20px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.5;
+    }
+    
+    .sketch-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      mask: linear-gradient(to bottom, transparent 0%, white 20%, white 80%, transparent 100%);
+      mask-size: 100% 100%;
+      mask-repeat: no-repeat;
+      z-index: 4;
+      pointer-events: none;
+      transition: mask-size 1.2s ease-out;
+    }
+    
+    .message {
+      margin-top: 20px;
+      text-align: center;
+      font-style: italic;
+      max-width: min(90%, 500px);
+      background: rgba(30, 41, 59, 0.8);
+      padding: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      font-size: clamp(14px, 3.5vw, 16px);
+    }
+    
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #0f172a;
+      z-index: 1;
+      font-weight: bold;
+      font-size: clamp(14px, 4vw, 18px);
+      text-align: center;
+      width: 80%;
+    }
+    
+    .drawing-path {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    .path-point {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background-color: rgba(236, 72, 153, 0.6);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: fadePoint 1.5s forwards;
+    }
+    
+    @keyframes fadePoint {
+      0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    }
+    
+    @media (max-width: 480px) {
+      .controls {
+        flex-direction: column;
+        padding: 10px;
+      }
+      
+      button {
+        width: 100%;
+      }
+      
+      .speed-container {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 350px) {
+      :root {
+        --container-size: 95vw;
+      }
+      
+      body {
+        padding: 10px;
+      }
+      
+      .message {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🌷 Tulipán para ti 🌷</h1>
+
+  <div class="controls">
+    <button id="drawBtn">▶ Dibujar</button>
+    <button id="pauseBtn">⏸ Pausar</button>
+    <button id="resetBtn">🔄 Reiniciar</button>
+    <div class="speed-container">
+      <label for="speed">Velocidad:</label>
+      <input type="range" id="speed" min="1" max="10" value="5">
+    </div>
+  </div>
+
+  <div class="flower-container" id="container">
+    <div class="pencil-effect"></div>
+    <div class="sketch-overlay" id="sketchOverlay"></div>
+    <div class="drawing-path" id="drawingPath"></div>
+    <div class="loading" id="loadingText">Cargando tulipán...</div>
+  </div>
+  
+  <div class="message">
+    <p>El tulipán representa amor perfecto y sinceridad. 🌷</p>
+  </div>
+
+  <script>
+    const container = document.getElementById("container");
+    const sketchOverlay = document.getElementById("sketchOverlay");
+    const drawingPath = document.getElementById("drawingPath");
+    const loadingText = document.getElementById("loadingText");
+    
+    let animationId;
+    let isPaused = false;
+    let flower = null;
+    let speed = 5;
+    let drawingPoints = [];
+    
+    // Imagen del tulipán local (debe estar en el mismo directorio)
+    const flowerImage = "tulipan.png";
+    const flowerOutline = "tulipan.png";
+    
+    const preloadedImage = new Image();
+    const preloadedOutline = new Image();
+    
+    let imagesLoaded = 0;
+    
+    function imageLoaded() {
+      imagesLoaded++;
+      if (imagesLoaded === 2) {
+        loadingText.style.display = 'none';
+        precalculateDrawingPoints();
+      }
+    }
+    
+    preloadedImage.onload = imageLoaded;
+    preloadedImage.onerror = function() {
+      preloadedImage.src = "tulipan.jpg";
+      preloadedOutline.src = "tulipan.jpg";
+    };
+    
+    preloadedOutline.onload = imageLoaded;
+    preloadedOutline.onerror = function() {
+      loadingText.textContent = "Error: No se pudo cargar la imagen 'tulipan.png' o 'tulipan.jpg'.";
+    };
+    
+    preloadedImage.src = flowerImage;
+    preloadedOutline.src = flowerOutline;
+
+    document.getElementById("speed").addEventListener("input", (e) => {
+      speed = parseInt(e.target.value);
+    });
+
+    document.getElementById("drawBtn").addEventListener("click", () => {
+      if (!flower) {
+        generateFlower();
+        animate();
+      } else if (isPaused) {
+        isPaused = false;
+        animate();
+      }
+    });
+
+    document.getElementById("pauseBtn").addEventListener("click", () => {
+      isPaused = true;
+      cancelAnimationFrame(animationId);
+      animationId = null;
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      isPaused = false;
+      cancelAnimationFrame(animationId);
+      animationId = null;
+      resetFlower();
+    });
+
+    function precalculateDrawingPoints() {
+      drawingPoints = [];
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+      const centerX = containerWidth / 2;
+      const baseY = containerHeight - (containerHeight * 0.22); // Ajustado para ser responsive
+      
+      // Puntos para dibujar el contorno del tulipán
+      for (let i = 0; i < 80; i++) {
+        const progress = i / 80;
+        const angle = progress * Math.PI * 2;
+        
+        // Forma de tulipán - valores relativos al tamaño del contenedor
+        const petalCurve = Math.sin(progress * Math.PI) * (containerWidth * 0.14);
+        const x = centerX + Math.cos(angle) * petalCurve;
+        const y = baseY - (containerHeight * 0.36) + Math.sin(angle) * petalCurve * 0.6;
+        
+        drawingPoints.push({x, y, delay: i * 2, type: 'outline'});
+      }
+      
+      // Tallo
+      for (let i = 0; i < 30; i++) {
+        const progress = i / 30;
+        const x = centerX;
+        const y = baseY - progress * (containerHeight * 0.3);
+        drawingPoints.push({x, y, delay: 160 + i * 2, type: 'outline'});
+      }
+      
+      // Puntos para "rellenar" el tulipán
+      for (let i = 0; i < 60; i++) {
+        const progress = i / 60;
+        const xVariation = Math.sin(progress * Math.PI * 6) * (containerWidth * 0.07);
+        const x = centerX + xVariation;
+        const y = baseY - (containerHeight * 0.36) + progress * (containerHeight * 0.24);
+        drawingPoints.push({x, y, delay: 220 + i * 3, type: 'fill'});
+      }
+    }
+
+    function generateFlower() {
+      const children = container.children;
+      for (let i = children.length - 1; i >= 0; i--) {
+        if (!children[i].classList.contains('pencil-effect') && 
+            !children[i].classList.contains('sketch-overlay') &&
+            !children[i].classList.contains('drawing-path') &&
+            !children[i].classList.contains('loading')) {
+          container.removeChild(children[i]);
+        }
+      }
+      
+      // Limpiar puntos de dibujo anteriores
+      while (drawingPath.firstChild) {
+        drawingPath.removeChild(drawingPath.firstChild);
+      }
+      
+      sketchOverlay.style.maskSize = '100% 100%';
+      
+      const flowerDiv = document.createElement('div');
+      flowerDiv.className = 'flower';
+      
+      // Imagen de color
+      const img = document.createElement('img');
+      img.src = preloadedImage.src;
+      img.alt = "Tulipán";
+      img.style.opacity = '0';
+      flowerDiv.appendChild(img);
+      
+      // Contorno
+      const outlineImg = document.createElement('img');
+      outlineImg.src = preloadedOutline.src;
+      outlineImg.alt = "Contorno del tulipán";
+      outlineImg.className = 'outline';
+      outlineImg.style.opacity = '0';
+      outlineImg.style.filter = 'contrast(0) brightness(10)';
+      flowerDiv.appendChild(outlineImg);
+      
+      container.appendChild(flowerDiv);
+      
+      flower = {
+        flower: flowerDiv,
+        img: img,
+        outline: outlineImg,
+        currentProgress: 0,
+        maxProgress: 500,
+        drawn: false
+      };
+    }
+
+    function resetFlower() {
+      if (flower) {
+        flower.img.style.opacity = '0';
+        flower.outline.style.opacity = '0';
+      }
+      flower = null;
+      sketchOverlay.style.maskSize = '100% 100%';
+      
+      // Limpiar puntos de dibujo
+      while (drawingPath.firstChild) {
+        drawingPath.removeChild(drawingPath.firstChild);
+      }
+    }
+
+    function animate() {
+      if (isPaused) return;
+      
+      let finished = true;
+      
+      if (flower.currentProgress < flower.maxProgress) {
+        finished = false;
+        flower.currentProgress += speed;
+        
+        const progress = flower.currentProgress / flower.maxProgress;
+        
+        // Animación de revelado
+        sketchOverlay.style.maskSize = `100% ${100 - progress * 100}%`;
+        
+        // Mostrar el contorno primero (primer 40% de la animación)
+        if (progress > 0.1 && progress < 0.4) {
+          flower.outline.style.opacity = '1';
+          flower.img.style.opacity = '0';
+        }
+        
+        // Transición entre contorno y color (siguiente 40%)
+        if (progress > 0.4 && progress < 0.8) {
+          const fillProgress = (progress - 0.4) / 0.4;
+          flower.outline.style.opacity = (1 - fillProgress * 0.7).toString();
+          flower.img.style.opacity = fillProgress.toString();
+        }
+        
+        // Mostrar completamente la imagen coloreada (último 20%)
+        if (progress > 0.8) {
+          flower.outline.style.opacity = '0';
+          flower.img.style.opacity = '1';
+        }
+        
+        // Crear efecto de puntos de dibujo
+        if (drawingPoints.length > 0) {
+          const pointIndex = Math.min(Math.floor(progress * drawingPoints.length), drawingPoints.length - 1);
+          const point = drawingPoints[pointIndex];
+          
+          // Crear punto de dibujo
+          if (pointIndex % 3 === 0) {
+            const dot = document.createElement('div');
+            dot.className = 'path-point';
+            dot.style.left = point.x + 'px';
+            dot.style.top = point.y + 'px';
+            
+            // Diferente color según el tipo de trazo
+            if (point.type === 'outline') {
+              dot.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+              dot.style.width = '3px';
+              dot.style.height = '3px';
+            } else {
+              dot.style.backgroundColor = 'rgba(236, 72, 153, 0.6)';
+              dot.style.width = '4px';
+              dot.style.height = '4px';
+            }
+            
+            drawingPath.appendChild(dot);
+            
+            // Eliminar el punto después de que termine la animación
+            setTimeout(() => {
+              if (dot.parentNode) {
+                dot.parentNode.removeChild(dot);
+              }
+            }, 1500);
+          }
+        }
+      }
+      
+      if (!finished) {
+        animationId = requestAnimationFrame(animate);
+      } else {
+        animationId = null;
+      }
+    }
+    
+    // Recalcular puntos cuando cambia el tamaño de la ventana
+    window.addEventListener('resize', function() {
+      if (drawingPoints.length > 0) {
+        precalculateDrawingPoints();
+      }
+    });
+    
+    window.addEventListener('load', function() {
+      generateFlower();
+    });
+  </script>
+</body>
+</html>
