@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>YP 🌷</title>
+  <title>Tulipán para ti 🌷</title>
   <style>
     :root {
       --container-size: min(90vw, 90vh, 500px);
@@ -443,20 +443,21 @@
     <button id="drawBtn">▶ </button>
     <button id="pauseBtn">⏸ </button>
     <button id="resetBtn">🔄 </button>
-    <!--div class="speed-container">
-      <label for="speed">Velocidad:</label>
-      <input type="range" id="speed" min="1" max="10" value="5">
-    </!div-->
+    <div class="speed-container">
+      <label for="speed">Rapidez</label>
+      <input type="range" id="speed" min="1" max="10" value="2">
+    </div>
   </div>
 
   <div class="flower-container" id="container">
     <div class="pencil-effect"></div>
     <div class="sketch-overlay" id="sketchOverlay"></div>
     <div class="drawing-path" id="drawingPath"></div>
+    <div class="loading" id="loadingText">Cargando tulipán...</div>
   </div>
   
   <div class="message">
-    <p>El tulipán... amor perfecto y sinceridad. 🌷</p>
+    <p>El tulipán representa amor perfecto y sinceridad. 🌷</p>
   </div>
 
   <div class="footer">
