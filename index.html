@@ -820,14 +820,14 @@
     const SUPABASE_URL = 'https://ebnilmdbsslqabuxhqbt.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVibmlsbWRic3NscWFidXhocWJ0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDExNDU3MDAsImV4cCI6MjA1NjcyMTcwMH0.bq34B1a9iiKmhthK_hI-2R5E2AJYjU-6yvGc1erdxkU';
     
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     async function incrementVisitCounter() {
       const visitCountElement = document.getElementById('visitCount');
       
       try {
         // Incrementar el contador usando la funcion RPC
-        const { data, error } = await supabase.rpc('increment_visit_counter');
+        const { data, error } = await supabaseClient.rpc('increment_visit_counter');
         
         if (error) {
           console.error('Error incrementando contador:', error);
