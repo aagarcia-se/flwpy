@@ -1,6 +1,7 @@
 // Cambia aquí el mensaje que aparece al final
+// Cambia aquí el mensaje que aparece al final
 const CONFIG = {
-    mensaje: "Para ti",
+    mensaje: "Para ti, TE AMO 🩵...",
     luciernagas: 16,
   };
   
