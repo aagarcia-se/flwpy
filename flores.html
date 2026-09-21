@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Para ti</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="Jardin.styles.css">
+</head>
+<body>
+  <main class="jardin">
+    <svg id="jardin-svg" class="jardin__lienzo" viewBox="0 0 400 660" preserveAspectRatio="xMidYMax meet" role="img" aria-label="Un girasol y dos tulipanes amarillos florecen en un jardín">
+      <defs>
+        <linearGradient id="gPetaloFrente" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#e08e0b"/>
+          <stop offset=".45" stop-color="#f7b91c"/>
+          <stop offset="1" stop-color="#ffe45c"/>
+        </linearGradient>
+        <linearGradient id="gPetaloAtras" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#c77a06"/>
+          <stop offset=".5" stop-color="#e9a112"/>
+          <stop offset="1" stop-color="#f8c837"/>
+        </linearGradient>
+        <linearGradient id="gHoja" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5fa23f"/>
+          <stop offset="1" stop-color="#2f6b2a"/>
+        </linearGradient>
+        <linearGradient id="gTulipan" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#f0a30c"/>
+          <stop offset=".5" stop-color="#ffd23a"/>
+          <stop offset="1" stop-color="#fff08a"/>
+        </linearGradient>
+        <linearGradient id="gTulipanLado" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="#d98b06"/>
+          <stop offset=".6" stop-color="#f6bb1f"/>
+          <stop offset="1" stop-color="#ffdf5a"/>
+        </linearGradient>
+        <radialGradient id="gSombraCentro">
+          <stop offset="0" stop-color="#000" stop-opacity=".4"/>
+          <stop offset=".65" stop-color="#000" stop-opacity="0"/>
+          <stop offset="1" stop-color="#ffc83c" stop-opacity=".28"/>
+        </radialGradient>
+        <radialGradient id="gSuelo">
+          <stop offset="0" stop-color="#0a1510"/>
+          <stop offset="1" stop-color="#0a1510" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="200" cy="630" rx="270" ry="32" fill="url(#gSuelo)"/>
+    </svg>
+    <p class="jardin__mensaje"></p>
+  </main>
+
+  <script src="jardin.utils.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

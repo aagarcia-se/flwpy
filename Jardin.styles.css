@@ -1,0 +1,125 @@
+:root {
+    --noche: #0b1712;
+    --bosque: #1b4231;
+    --luz: #ffe9a6;
+  }
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  
+  body {
+    background: radial-gradient(ellipse at 50% 30%, #2b5c43 0%, var(--bosque) 35%, var(--noche) 85%);
+    color: var(--luz);
+    font-family: "Cormorant Garamond", Georgia, serif;
+    overflow: hidden;
+  }
+  
+  .jardin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100dvh;
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+  
+  .jardin__lienzo {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    overflow: visible;
+  }
+  
+  .jardin__mensaje {
+    padding: 0 1rem calc(1.2rem + env(safe-area-inset-bottom, 0px));
+    font-size: clamp(1.8rem, 7vw, 2.8rem);
+    font-style: italic;
+    text-align: center;
+    text-shadow: 0 0 18px rgba(255, 200, 60, .45);
+    animation: aparecer 2.4s ease 4.4s backwards;
+  }
+  
+  /* ---------- Elementos del SVG (estado final = estado base) ---------- */
+  
+  .tallo {
+    fill: none;
+    stroke: #3c7a2e;
+    stroke-width: 9;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    animation: crecer 1.8s cubic-bezier(.3, .6, .3, 1) var(--dt, 0s) backwards;
+  }
+  
+  .hoja {
+    transform-box: fill-box;
+    transform-origin: 100% 74%;
+    animation: brotar 1.3s cubic-bezier(.2, .8, .3, 1.15) var(--d, 1s) backwards;
+  }
+  
+  .nervio-hoja { fill: none; stroke: rgba(20, 60, 20, .35); stroke-width: 1.5; stroke-linecap: round; }
+  .nervio { fill: none; stroke: rgba(150, 70, 0, .35); stroke-width: 1.2; stroke-linecap: round; }
+  
+  .petalo {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: abrir 1.2s cubic-bezier(.2, .9, .3, 1.1) var(--d, 2s) backwards;
+  }
+  
+  .cabeza { filter: drop-shadow(0 0 16px rgba(255, 200, 40, .35)); }
+  
+  .cabeza-tulipan {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+    animation: abrir 1.5s cubic-bezier(.2, .9, .3, 1.1) var(--d, 2s) backwards;
+  }
+  
+  .semillas {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: centro 1.6s ease 3s backwards;
+  }
+  
+  .mecer {
+    transform-origin: 200px 625px;
+    animation: mecer 8s ease-in-out 4.5s infinite;
+  }
+  
+  /* ---------- Luciérnagas ---------- */
+  
+  .luciernaga {
+    position: fixed;
+    left: var(--x);
+    top: var(--y);
+    width: var(--t);
+    height: var(--t);
+    border-radius: 50%;
+    background: #ffe27a;
+    box-shadow: 0 0 10px 3px rgba(255, 220, 90, .6);
+    opacity: 0;
+    pointer-events: none;
+    animation: flotar var(--dur) ease-in-out var(--ret) infinite;
+  }
+  
+  /* ---------- Animaciones ---------- */
+  
+  @keyframes crecer  { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+  @keyframes brotar  { from { transform: scale(0); } }
+  @keyframes abrir   { from { transform: scale(0); opacity: 0; } }
+  @keyframes centro  { from { transform: scale(.4); opacity: 0; } }
+  @keyframes aparecer { from { opacity: 0; transform: translateY(10px); } }
+  
+  @keyframes mecer {
+    0%, 100% { transform: rotate(0deg); }
+    25%      { transform: rotate(1.1deg); }
+    75%      { transform: rotate(-1.1deg); }
+  }
+  
+  @keyframes flotar {
+    0%, 100% { opacity: 0; transform: translate(0, 0); }
+    20%, 80% { opacity: .9; }
+    50%      { transform: translate(var(--dx), var(--dy)); }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; }
+    .luciernaga { display: none; }
+  }
